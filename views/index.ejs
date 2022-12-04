@@ -16,7 +16,7 @@
 
     <script>
         var myGamePiece;
-        var rect = Math.round(Math.random() * (5 - 2) + 2)
+        var rect = Math.round(Math.random() * (10 - 2) + 2)
         var gen = rect
         var gamePieces = []
 
@@ -109,14 +109,24 @@
 
             }
             this.newPos = function () {
-                if (this.x - this.width / 2 < 0)
-                    this.speed_x = 2;
-                else if ((this.x + this.width / 2) >= myGameArea.context.canvas.width)
-                    this.speed_x = -2;
-                if (this.y - this.height / 2 < 0)
-                    this.speed_y = -2;
-                else if ((this.y + this.height / 2) >= myGameArea.context.canvas.height)
-                    this.speed_y = 2;
+                var sign = Math.round(Math.random() * 1)
+                var signT = [-1,1]
+                if (this.x - this.width / 2 < 0){
+                    var changeX = Math.random() * 6
+                    this.speed_x = Math.abs(this.speed_x) + signT[sign]*changeX;
+                }
+                else if ((this.x + this.width / 2) >= myGameArea.context.canvas.width){
+                    var changeX = Math.random() * 6
+                    this.speed_x = -Math.abs(this.speed_x) + signT[sign]*changeX;
+                }
+                if (this.y - this.height / 2 < 0){
+                    var changeY = Math.random() * 6
+                    this.speed_y = -Math.abs(this.speed_y) + signT[sign]*changeY;
+                }
+                else if ((this.y + this.height / 2) >= myGameArea.context.canvas.height){
+                    var changeY = Math.random() * 6
+                    this.speed_y = Math.abs(this.speed_y)+ signT[sign]*changeY;
+                }
                 this.x += this.speed_x;
                 this.y -= this.speed_y;
             }
