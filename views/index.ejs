@@ -9,14 +9,14 @@
     <style>
         canvas {
             border: 1px solid #c91515;
-            background-color: #f1f1f1;
+            background-color: #eff1df;
         }
     </style>
 
 
     <script>
         var myGamePiece;
-        var rect = Math.round(Math.random() * (10 - 2) + 2)
+        var rect = Math.round(Math.random() * (10-5)+5)
         var gen = rect
         var gamePieces = []
 
@@ -30,7 +30,7 @@
                     good = true
                     for (el in usedX) {
                         if (Math.abs(x - usedX[el]) < 150) {
-                            good = false
+                            good = true
                             break
                         }
                     }
@@ -43,7 +43,7 @@
                     good = true
                     for (el in usedY) {
                         if (Math.abs(y - usedY[el]) < 100) {
-                            good = false
+                            good = true
                             break
                         }
                     }
@@ -93,8 +93,8 @@
         function component(width, height, color, x, y) {
             this.width = width;
             this.height = height;
-            this.speed_x = 2;
-            this.speed_y = 2;
+            this.speed_x = Math.random() * (6-1) +1 ;
+            this.speed_y = Math.random() * (6-1) + 1;
             this.x = x;
             this.y = y;
             this.update = function () {
