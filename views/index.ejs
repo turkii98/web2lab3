@@ -17,6 +17,7 @@
     <script>
         var myGamePiece;
         var rect = Math.round(Math.random() * (5 - 2) + 2)
+        var gen = rect
         var gamePieces = []
 
         function startGame() {
@@ -64,6 +65,7 @@
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
                 this.frameNo = 0;
                 this.interval = setInterval(updateGameArea, 20);
+                this.context.font = "20px Georgia";
                 this.canvas.addEventListener('click', function () {
                     var x = event.pageX - 8,
                         y = event.pageY - 8; 
@@ -126,6 +128,8 @@
                 gamePieces[i].newPos();
                 gamePieces[i].update();
             }
+            myGameArea.context.fillText("Generirano je: "+gen+" kvadrata", 1060, 30);
+            myGameArea.context.fillText("Pogođeno je: "+(gen-rect)+" kvadrata", 1060, 60);
         }
     </script>
 </head>
