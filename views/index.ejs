@@ -1,62 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <canvas id="newCanvas" width="1300" height="840" style="border: 1px solid #e75656; background-color: #eee6e5;">
-    Your browser doesnt support
-    </canvas>
-    
-    <script>
-        var c = document.getElementById("newCanvas")
-        var ctx = c.getContext("2d")
-        ctx.font = "20px Georgia";
-        ctx.fillText("Hello World!", 10, 50);
-        ctx.fillStyle = "#3090ff";
-        var rect = Math.round(Math.random()*(5-2) +2)
-        var usedX = [2000]
-        var usedY = [2000]
-
-
-        for(i=0; i<rect; i++) {
-            var good = false
-            while(!good) {
-                x = Math.round(Math.random()*(1150))
-                good = true
-                for(el in usedX){
-                    console.log("x udaljenost("+ x+ "-" + usedX[el] +") ="+Math.abs(x-usedX[el]))
-                    if(Math.abs(x-usedX[el]) < 150){
-                        console.log("NEIN")
-                        good = false
-                        break
-                    }
-                }
-            }
-            usedX.push(x)
-            
-            var good = false
-            while(!good) {
-                y = Math.round(Math.random()*(740))
-                good = true
-                for(el in usedY){
-                    console.log("y udaljenost : "+Math.abs(y-usedY[el]))
-                    if(Math.abs(y-usedY[el])<100){
-                        console.log("NEIN")
-                        good = false
-                        break
-                    }
-                }
-            }
-            usedY.push(y)
-            ctx.fillRect(x,y,80,80)
-            ctx.beginPath();
+    <title>HTML5 lab</title>
+    <style>
+        canvas {
+            border: 1px solid #c91515;
+            background-color: #f1f1f1;
         }
-        console.log("x: "+usedX)
-        console.log("y: "+usedY)
-        </script>
+    </style>
+
+
+    <script>
+        var myGamePiece;
+        var rect = Math.round(Math.random() * (5 - 2) + 2)
+        var gamePieces = []
+
+        function startGame() {
+            var usedX = [2000]
+            var usedY = [2000]
+            for (i = 0; i < rect; i++) {
+                var good = false
+                while (!good) {
+                    x = Math.round(Math.random() * (1150))
+                    good = true
+                    for (el in usedX) {
+                        if (Math.abs(x - usedX[el]) < 150) {
+                            good = false
+                            break
+                        }
+                    }
+                }
+                usedX.push(x)
+
+                var good = false
+                while (!good) {
+                    y = Math.round(Math.random() * (740))
+                    good = true
+                    for (el in usedY) {
+                        if (Math.abs(y - usedY[el]) < 100) {
+                            good = false
+                            break
+                        }
+                    }
+                }
+                usedY.push(y)
+                gamePieces[i] = new component(50, 50, "red", x, y);
+            }
+
+            myGameArea.start();
+        }
+
+        var myGameArea = {
+            canvas: document.createElement("canvas"),
+            start: function () {
+                this.canvas.id = "myGameCanvas";
+                this.canvas.width = 1300;
+                this.canvas.height = 840;
+                this.context = this.canvas.getContext("2d");
+                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                this.frameNo = 0;
+                this.interval = setInterval(updateGameArea, 20);
+                this.canvas.addEventListener('click', function () {
+                    var x = event.pageX - 8,
+                        y = event.pageY - 8; 
+                        for (i = 0; i < rect; i++) {
+                            if( ((gamePieces[i].x + gamePieces[i].width / 2) > x && (gamePieces[i].x - gamePieces[i].width / 2) < x) &&
+                            ((gamePieces[i].y + gamePieces[i].height / 2) > y && (gamePieces[i].y - gamePieces[i].height / 2) < y)
+                            ){
+                                gamePieces.splice(i,1)
+                                rect = rect -1
+                                console.log(rect)
+                                break
+                            } 
+                        }
+                }, false);
+            },
+            stop: function () {
+                clearInterval(this.interval);
+            },
+            clear: function () {
+                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+        }
+
+
+        function component(width, height, color, x, y) {
+            this.width = width;
+            this.height = height;
+            this.speed_x = 2;
+            this.speed_y = 2;
+            this.x = x;
+            this.y = y;
+            this.update = function () {
+                ctx = myGameArea.context;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.fillStyle = color;
+                ctx.fillRect(this.width / -2, this.height / -2, this.width, this.height);
+                ctx.restore();
+            }
+            this.clearO = function () {
+
+            }
+            this.newPos = function () {
+                if (this.x - this.width / 2 < 0)
+                    this.speed_x = 2;
+                else if ((this.x + this.width / 2) >= myGameArea.context.canvas.width)
+                    this.speed_x = -2;
+                if (this.y - this.height / 2 < 0)
+                    this.speed_y = -2;
+                else if ((this.y + this.height / 2) >= myGameArea.context.canvas.height)
+                    this.speed_y = 2;
+                this.x += this.speed_x;
+                this.y -= this.speed_y;
+            }
+        }
+
+        function updateGameArea() {
+            myGameArea.clear();
+            for (i = 0; i < rect; i++) {
+                gamePieces[i].newPos();
+                gamePieces[i].update();
+            }
+        }
+    </script>
+</head>
+
+<body onload="startGame()">
 </body>
+
 </html>
