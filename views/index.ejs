@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="newCanvas" width="1300" height="840" style="border: 1px solid #e75656; background-color: #eee6e5;">
+    Your browser doesnt support
+    </canvas>
+    
+    <script>
+        var c = document.getElementById("newCanvas")
+        var ctx = c.getContext("2d")
+        ctx.font = "20px Georgia";
+        ctx.fillText("Hello World!", 10, 50);
+        ctx.fillStyle = "#3090ff";
+        var rect = Math.round(Math.random()*(5-2) +2)
+        var usedX = [2000]
+        var usedY = [2000]
+
+
+        for(i=0; i<rect; i++) {
+            var good = false
+            while(!good) {
+                x = Math.round(Math.random()*(1150))
+                good = true
+                for(el in usedX){
+                    console.log("x udaljenost("+ x+ "-" + usedX[el] +") ="+Math.abs(x-usedX[el]))
+                    if(Math.abs(x-usedX[el]) < 150){
+                        console.log("NEIN")
+                        good = false
+                        break
+                    }
+                }
+            }
+            usedX.push(x)
+            
+            var good = false
+            while(!good) {
+                y = Math.round(Math.random()*(740))
+                good = true
+                for(el in usedY){
+                    console.log("y udaljenost : "+Math.abs(y-usedY[el]))
+                    if(Math.abs(y-usedY[el])<100){
+                        console.log("NEIN")
+                        good = false
+                        break
+                    }
+                }
+            }
+            usedY.push(y)
+            ctx.fillRect(x,y,80,80)
+            ctx.beginPath();
+        }
+        console.log("x: "+usedX)
+        console.log("y: "+usedY)
+        </script>
+</body>
+</html>
